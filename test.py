@@ -1,3 +1,3 @@
-a = [-1,0]
-b = [1,0]
-print(a+b)
+t = (1, 2)
+x, y = t
+print(x, y)
