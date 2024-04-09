@@ -22,6 +22,14 @@ def bfs(plans, q, dx, dy):
                 continue
             if plans[nx][ny] == 0:
                 continue
+
+            '''
+            사실 아래에 내가 작성한 것은 정확하지 않음
+            어차피 일찍 노드를 방문하는 것만 적으면 되기에
+            if plans[nx][ny] == 1 
+            의 경우에만 +1 해주면 됨
+            '''
+            
             if plans[nx][ny] != 1 and plans[nx][ny] < plans[x][y]+1:
                 continue
             plans[nx][ny] = plans[x][y]+1
