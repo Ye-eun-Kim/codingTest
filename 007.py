@@ -1,3 +1,6 @@
+# 이것이 코딩테스트다 118p
+# 게임 개발
+
 n, m = map(int, input().split())
 a, b, d = map(int, input().split())
 
