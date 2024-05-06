@@ -1,0 +1,41 @@
+n = int(input())
+a, b = map(int, input().split())
+m = int(input())
+# n+1로 설정하지 않고 10으로 하드코딩해버려서 처음에 index error
+graph = [0]*(n+1)
+
+for _ in range(m):
+    # x가 부모
+    x, y = map(int, input().split())
+    graph[y] = x
+    # 아래에서 위로 탐색하다가 같은 (조)부모를 만났을 때
+    # 각자 올라간 거리를 더하면 될 듯
+
+def dfs(v, w, cnt):
+    if graph[v] == 0:
+        return
+    p = graph[v]
+    cnt += 1
+    if p == w:
+        global result
+        # 아래 result에 cnt를 할당하는 부분에서 에러 발생
+        # dfs를 두 번 실행하기 때문에 최단 촌수를 구하는 알고리즘 필요
+        if result == -1:
+            result = cnt
+        else:
+            result = min(result, cnt)
+    else:
+        dfs(p, w, cnt)
+        dfs(w, p, cnt)
+
+# result 기본값을 -1로 설정, 촌수 찾으면 그 값으로 변경
+result = -1
+
+if a == graph[b] or b == graph[a]:
+    result = 1
+
+dfs(a, b, 0)
+dfs(b, a, 0)
+
+print(result)
+
