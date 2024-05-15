@@ -36,3 +36,4 @@ answer = solve(graph, n)
 # 출력
 for row in answer:
     print(*row)
+
