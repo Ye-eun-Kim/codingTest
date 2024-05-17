@@ -1,3 +1,7 @@
-tup = [(1,2,3), (3,5,4), (2,6,4)]
+queue = [4,5,6]
+queue.append(7)
+queue.append(9)
 
-print(3 in tup[1])
+queue.pop(0)
+
+print(queue)

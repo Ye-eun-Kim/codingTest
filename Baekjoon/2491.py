@@ -13,5 +13,3 @@ for i in range(n-1):
 result = max(max(dp_long), max(dp_short))
 
 print(result)
-
-
