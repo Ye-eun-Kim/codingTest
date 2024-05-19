@@ -1,23 +1,25 @@
 n = int(input())
 requests = list(map(int, input().split()))
+requests.sort()
 m = int(input())
 
 sum_requests = sum(requests)
+tot_diff = sum_requests - m
+result = 0
 
-if sum_requests <= m:
-    print(max(requests))
+if tot_diff <= 0:
+    print(requests[-1])
 
 else:
-    temp = []
-    avg = m//n
-    diff = sum_requests - m
-    for request in requests:
-        if request > avg:
-            temp.append(request)
-    num_overs = len(temp)
-    if diff % num_overs == 0:
-        sub = diff // num_overs
-    else:
-        sub = diff // num_overs + 1
-    avg_temp = sum(temp)/len(temp)
-    print(int(avg_temp - sub))
+    for i in range(n-1, -1, -1):
+        big_num_sum = 0
+        for j in range(n-1, i-1, -1):
+            big_num_sum += requests[j]
+        temp = (big_num_sum - tot_diff) // (n-j)
+        if i == n-1:
+            result = temp
+        elif temp > result:
+            result = temp
+        else:
+            break
+    print(result)
