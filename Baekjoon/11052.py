@@ -1,15 +1,20 @@
 n = int(input())
-prices = list(map(int, input().split()))
-dp = [price for price in prices]
+dp = list(map(int, input().split()))
 
 for i in range(1, n):
-    for j in range(i // 2):
-        if j % 2 == 1 and j == n // 2 - 1:
-            dp[i] = max(2 * prices[j], dp[-1])
-            print("same", 2 * prices[j], dp[-1])
-        else:
-            print(prices[j] + prices[n - j - 2], dp[-1])
-            dp[i] = max(prices[j] + prices[n - j - 2], dp[-1])
-            print("changed", dp[-1])
+    if i == 1:
+        dp[1] = max(2 * dp[0], dp[1])
+    if i % 2 == 1:
+        for j in range(i // 2 + 1):
+            if j == (i // 2):
+                dp[i] = max(2 * dp[j], dp[i])
+            else:
+                dp[i] = max(dp[j] + dp[i - j - 1], dp[i])
+    else:
+        for j in range(i // 2):
+            if j == (i // 2):
+                dp[i] = max(2 * dp[j], dp[i])
+            else:
+                dp[i] = max(dp[j] + dp[i - j - 1], dp[i])
 
 print(dp[-1])
