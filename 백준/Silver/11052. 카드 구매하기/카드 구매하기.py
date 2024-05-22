@@ -2,6 +2,17 @@ n = int(input())
 dp = list(map(int, input().split()))
 
 for i in range(1, n):
+    for j in range(i//2+1):
+        dp[i] = max(dp[j] + dp[i - j - 1], dp[i])
+
+print(dp[-1])
+
+'''
+훨씬 간단한 코드로 바꿀 수 있었다...
+n = int(input())
+dp = list(map(int, input().split()))
+
+for i in range(1, n):
     if i == 1:
         dp[1] = max(2 * dp[0], dp[1])
     if i % 2 == 1:
@@ -17,4 +28,4 @@ for i in range(1, n):
             else:
                 dp[i] = max(dp[j] + dp[i - j - 1], dp[i])
 
-print(dp[-1])
+print(dp[-1])'''
