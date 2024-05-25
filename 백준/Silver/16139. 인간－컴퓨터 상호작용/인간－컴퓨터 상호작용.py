@@ -1,8 +1,6 @@
-import sys
-
 s = input()
 q = int(input())
-questions = [sys.stdin.readline().split() for _ in range(q)]
+questions = [input().split() for _ in range(q)]
 
 for question in questions:
     target, left, right = question[0], int(question[1]), int(question[2])
