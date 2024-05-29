@@ -1,3 +1,6 @@
+import sys
+input = sys.stdin.readline
+
 n = int(input())
 infos = [list(map(int, input().split())) for _ in range(n)]
 infos = sorted(infos, key=lambda x: -x[1])
