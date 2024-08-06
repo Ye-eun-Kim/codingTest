@@ -1,5 +1,5 @@
 # 이것이 코딩테스트다 237p
-# 다익스트라 간단한 알고리즘과 어려운 알고리즘 비교
+# 다익스트라 간단한 알고리즘과 개선된 알고리즘 비교
 
 # 간단한 알고리즘
 
@@ -26,7 +26,7 @@ distance = [INF] * (n+1)
 for _ in range(m):
     a, b, c = map(int, input().split())
     # a -> b 비용이 c라는 뜻
-    graph[a].append((b,c))
+    graph[a].append((b, c))
 
 # 방문하지 않은 노드 중에서 가장 최단 거리가 짧은 노드 번호 반환
 def get_smallest_node():
@@ -49,6 +49,12 @@ def dijkstra(start):
         # start부터 X까지의 거리: 가중치
         # start와 연결된 모든 노드에 대해 수행.
     # 시작 노드를 제외한 전체 n-1개의 노드에 대해 반복
+    """
+    시작 노드를 포함하여 총 n개의 노드에 대해 get_smallest_node()를 호출하며
+    그 함수 내부에서 n개의 노드에 대해 distance를 체크하므로 시간 복잡도가 O(N^2)
+    M개의 간선에 대해 distance 갱신하지만 O(N^2+M)은 O(N^2)으로 표기.
+    따라서 시간 복잡도는 O(N^2)
+    """
     for i in range(n-1):
         # 굳이 i를 작성할 필요는 없어 보임. 그냥 _로 처리해도 될 듯.
         # 현재 최단 거리가 가장 짧은 노드를 꺼내서 방문 처리
