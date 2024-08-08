@@ -55,7 +55,7 @@ def dijkstra(start):
     while q: # 큐가 비어있지 않다면
         # 최단 거리가 가장 짧은 노드에 대한 정보 꺼내기
         dist, now = heapq.heappop(q)
-        # 현재 노드가 이미 처리된 적이 있고 (distance가 dist보다 작다는 것은 INF 아니라는 뜻)
+        # 현재 노드가 이미 처리된 적이 있고 (distance가 dist보다 작다는 것은 INF 아니라는 뜻도 포함)
         # distance 값 갱신에 도움이 안 되면 패스
         if distance[now] < dist:
             continue
@@ -69,7 +69,7 @@ def dijkstra(start):
             # 현재 노드를 거쳐 다른 노드로 이동하는 것이 더 짧은 경우(갱신 이득)
             if cost < distance[i[0]]:
                 distance[i[0]] = cost
-            heapq.heappush(q, (cost, i[0]))
+                heapq.heappush(q, (cost, i[0]))
 
 # 다익스트라 알고리즘 수행
 dijkstra(start)
