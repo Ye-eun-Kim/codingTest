@@ -13,13 +13,6 @@ graph = [[(0, INF) for i in range(n+1)] for _ in range(n+1)]
 for i in range(1, n+1):
     graph[i][i] = '-'
 
-#
-# for i in range(1, n+1):
-#     for j in range(1, n+1):
-#         print(graph[i][j][0], end=" ")
-#     print("")
-
-
 # 무방향
 for j in range(m):
     a, b, t = map(int, input().split())
