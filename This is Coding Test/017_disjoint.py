@@ -30,6 +30,27 @@ parent = [0] * (v+1) # 부모 테이블 초기화
 for i in range(1, v+1):
     parent[i] = i
 
+'''
+사이클 판별 코드 시작
+'''
+cycle = False  # 사이클 발생 여부
+
+for i in range(e):
+    a, b = map(int, input().split())
+    # 사이클이 발생한 경우 종료
+    if find_parent(parent, a) == find_parent(parent, b)
+        cycle = True
+        break
+    # 사이클이 발생하지 않았다면 합집합(union) 수행
+    else:
+        union_parent(parent, a, b)
+'''
+사이클 판별 코드 끝
+'''
+
+'''
+부모 테이블을 출력하여 현황을 확인하는 목적의 코드
+
 # union 연산을 각각 수행
 for i in range(e):
     a, b = map(int, input().split())
@@ -47,7 +68,7 @@ print('부모 테이블: ', end = "")
 for i in range(1, v+1):
     print(parent[i], end=" ")
 
-
+'''
 
 '''
 input 예시
