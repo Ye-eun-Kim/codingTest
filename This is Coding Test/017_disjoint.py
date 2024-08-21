@@ -7,7 +7,11 @@ def find_parent(parent, x):
     # 루트 노드가 아니라면, 루트 노드를 찾을 때까지 재귀적으로 호출
     if parent[x] != x:
         return find_parent(parent, parent[x])
-    return x
+    return parent[x]  # 경로 압축법: x와 parent[x] 값은 같지만 서로 다른 객체
+    '''부모 테이블에 바로 루트 노드가 들어가기 때문에 자동으로 갱신된다.
+    예를 들어 처음에 3의 루트 노드가 자신이었다가 2로 바뀐다고 하자.
+    이때 2가 새로운 루트 노드 1을 가지게 된다면 3의 루트 노드도 1로 바뀐다.'''
+    # return x  --> 개선 이전 코드
 
 # 두 원소가 속한 집합을 합치기
 def union_parent(parent, a, b):
