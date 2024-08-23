@@ -1,3 +1,11 @@
+# 이것이 코딩테스트다 289p
+'''
+크루스칼 알고리즘: 최소 신장 트리 탐색
+1. 간선 데이터를 비용에 따라 정렬
+2. 간선의 사이클 발생 여부 확인(사이클 있으면 신장 트리 아님)
+3. 모든 간선에 대해 2번 과정 반복
+'''
+
 def find_parent(parent, x):
     if parent[x] != x:
         parent[x] = find_parent(paent, parent[x])
