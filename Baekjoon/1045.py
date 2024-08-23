@@ -1,32 +1,49 @@
-n, m = map(int, input().split())
-graph = [[]*n for _ in range(n)] # 인접 리스트
-num_v = 0
-roads = [] # 도로 집합
+import itertools
 
-def is_connected():
-    global graph
+def union_parent(parent, i, j):
+    pi, pj = parent[i], parent[j]
+    if pi < pj:
+        parent[j] = parent[i]
+        return
+    else:
+        parent[i] = parent[j]
+        return
 
-    return False
-
-for i in range(n):
-    string = input()
-    for j in range(i+1, n):
-        if string[j] == 'Y':
-            graph[i].append(j)
+def prep_roads(parent, n):
+    for i in range(1, n + 1):
+        line = input()
+        for j in range(i + 1, n + 1):
+            char = line[j - 1]
+            if char == 'N':
+                continue
+            union_parent(parent, i, j)
             roads.append((i, j))
-            continue
 
-print(roads)
+n, m = map(int, input().split())
+parent = list(range(n+1))
+roads = []
+prep_roads(parent, n)
 
-if not is_connected():
-    print(-1)
-    exit()
+for el in parent:
+    if (el != 1 and el != 0) or (len(roads) < m):
+        print(-1)
+        exit()
 
-selected = []
-for road in roads:
-    if road[0] in selected
+# print(roads)
 
+for comb in itertools.combinations(roads, m):
+    result = [0] * (n + 1)
+    num = 0
+    for road in comb:
+        if num == m:
+            break
+        i, j = road
+        result[i] += 1
+        result[j] += 1
+        num += 1
+    result.pop(0)
+    if 0 in result:
+        continue
+    break
 
-
-
-
+print(*result)
