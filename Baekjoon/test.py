@@ -5,5 +5,6 @@ queue.append(7)
 queue.append(9)
 
 queue.pop()
-
+for el in queue:
+    print(el)
 print(queue, len(queue))
