@@ -1,7 +1,9 @@
-queue = [4,5,6]
+from collections import deque
+queue = deque()
+queue.append(0)
 queue.append(7)
 queue.append(9)
 
-queue.pop(0)
+queue.pop()
 
-print(queue)
+print(queue, len(queue))
