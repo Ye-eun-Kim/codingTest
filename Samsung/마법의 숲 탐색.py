@@ -1,8 +1,8 @@
 r,c,k = map(int, input().split())
 INF = int(1e9)
-map = [[INF]*(c+1) for _ in range(r+1)] # 지도 정보
+graph = [[INF]*(c+1) for _ in range(r+1)] # 지도 정보
 dx = [0, 1, 0, -1]
-dy = [1, 0, -1, 0]
+dy = [-1, 0, 1, 0]
 
 golems = [] # 골렘 정보를 담음
 golems.append((0,0)) # dummy...
@@ -13,25 +13,57 @@ for _ in range(k):
 vals = [0] * (k+1) # 골렘의 행 정보 저장하는 리스트
 
 
-def mark(r, c, i): # 센터의 r, c를 받으면 주변을 다 map에 체크
+def mark(c, r, i): # 센터의 r, c를 받으면 주변을 다 graph에 체크
     global dx, dy
+    try:
+        graph[r][c] = i
+    except:
+        print(c, r, i)
     for dxx, dyy in zip(dx, dy):
         x, y = c+dxx, r+dyy
-        map[x][y] = i
+        if in_range(x, y):
+            graph[y][x] = i
 
-def travel(i):
-    # TODO: 인접 골렘 파악하기
-    # 인접 골렘의 r_val이 곧 해당 골렘의 r_val
+def travel(x, y, i, nd):
+    # 인접 골렘 파악하기
+    # 인접 골렘의 val이 곧 해당 골렘의 val
+    val = y+1
+    global dx, dy, graph, vals
+    ex, ey = x+dx[nd], y+dy[nd]
+    for dxx, dyy in zip(dx, dy):
+        nx, ny = ex+dxx, ey+dyy
+        if in_range(nx, ny):
+            j = graph[ny][nx]
+            if j != i and j != INF:
+                val = max(vals[j], val)
+    vals[i] = val
+    return vals[i]
 
-    vals[i] = r_val
-    return r_val
+
+def can_go(x, y):
+    global dx, dy
+    for dxx, dyy in zip(dx, dy):
+        nx, ny = x+dxx, y+dyy
+        if ny >= 1:
+            if in_range(nx, ny):
+                if graph[ny][nx] == INF:
+                    continue
+                else:
+                    return False
+            return False
+        else:
+            if ny <= r and nx >= 1 and nx <= c:
+                continue
+            else:
+                return False
+    return True
+
 
 
 def in_range(x, y):
-    if x >= 2 and x <= c-1 and y <= r-1:
+    if x >= 1 and x <= c and y <= r and y >= 1:
         return True
     return False
-
 
 # 0: 못 감, 1: 남, 2: 서남, 3: 동남
 def go(ri, ci, di):
@@ -39,9 +71,8 @@ def go(ri, ci, di):
     x, y = ci, ri
     for dxx, dyy, ddd in zip(dx, dy, dd):
         nx, ny, nd = x+dxx, y+dyy, (di+ddd)%3
-        if not in_range(nx, ny):
-            continue
-        return nx, ny, nd # in_range True라면 그 방향으로 움직여...
+        if can_go(nx, ny):
+            return ny, nx, nd # can_go True라면 그 방향으로 움직여...
     # 아무 방향으로도 이동할 수 없다면 본래 값을 출력
     return ri, ci, di
 
@@ -51,7 +82,8 @@ def down(ci, di):
     while True:
         nr, nc, nd = go(ri, ci, di)
         if nr == ri and nc == ci and nd == di:
-            break # TODO: 다 내려간 것!
+            break # 다 내려간 것!
+        ri, ci, di = nr, nc, nd
     return nc, nr, nd # 센터 x, y 좌표, exit 정보
 
 tot = 0
@@ -60,22 +92,24 @@ for i in range(1, k+1):
     golem = golems[i]
     ci, di = golem[0], golem[1]
     if vacant: # 비어 있을 때 그냥 내리기
-        mark(r-1, ci, i)
+        mark(ci, r-1, i)
         vals[1] = r
         tot += r
         vacant = False
+        print(tot, ci, r-1, i)
         continue
     x, y, nd = down(ci, di)
     if y < 2:
-        # map, vals 초기화
-        map = [[INF] * (c + 1) for _ in range(r + 1)]
+        # graph, vals 초기화
+        graph = [[INF] * (c + 1) for _ in range(r + 1)]
         vals = [0] * (k + 1)
         vacant = True
         continue
-    golems[i][1] = nd
     mark(x, y, i)
-    tot += travel(i)
+    tot += travel(x, y, i, nd)
+    print(tot, x, y, i)
 
+print(tot)
 
 # TODO: 골렘을 내리기(정착)
 '''
