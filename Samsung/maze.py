@@ -12,6 +12,7 @@ for i in range(1, N+1):
 people = []
 for _ in range(M):
     people.append([tuple(map(int, input().split())), N])
+    # people은 2차원 배열, m개의 [(좌표 튜플), exit까지 거리]를 가짐.
 er, ec = map(int, input().split())
 dr = [-1, 0, 1, 0]
 dc = [0, 1, 0, -1]
@@ -72,17 +73,20 @@ def rotate():
     temp = [[0 for _ in range(l)] for _ in range(l)]
     for i in range(l):
         for j in range(l):
-            maze_val = maze[lr+i][lc+j]
+            r, c = lr+i, lc+j
+            maze_val = maze[r][c]
             if maze_val != 0: # 벽일 때
-                tr, tc = j, l-i
+                tr, tc = j, l-i-1 # temp의 r, c
                 if maze_val != 0:
                     maze_val -= 1
                 temp[tr][tc] = maze_val
-            # TODO: 참가자, exit 돌리기
-            # TODO: 여기 하다 말았다. 일단 temp 좌표는 0~l-1까지라서 좀 헷갈림
-            if i == er and j == ec: # exit
+            # TODO: 참가자
+            if r == er and c == ec: # exit
                 er, ec = lr+tr, lc+tc
-                rc-i-1
+            if (r, c) in people:
+            # TODO: 여기까지
+
+
                 
                 
 
