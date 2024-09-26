@@ -138,12 +138,16 @@ for i in range(K):
             people[p][0] = (nr, nc)
             people[p][1] = new_d
             result += 1
+            if i == 2:
+                print(f"person moved!", "({r}, {c}), ({nr}, {nc})")
         if (nr == er and nc == ec) or new_d == 0: # 탈출
             people[p][0] = -1
             cnt += 1
             q.append(p)
         if cnt == M: # 모든 참가자 탈락하면 종료
             break
+    if i == 2:
+        print(breakpoint)
 
     # 탈락자 제거
     while q:
