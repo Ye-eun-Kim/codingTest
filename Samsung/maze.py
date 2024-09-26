@@ -4,8 +4,8 @@ file = open("sample.txt", "r")
 input = file.readline
 N, M, K = map(int, input().split())  # 미로 크기, 참가자 수, 게임 시간
 maze = [[0 for _ in range(N+1)] for _ in range(N+1)] # 1, 1을 시작점으로, n, n을 끝점으로
-for i in range(1, N+1):
-    maze[i][1:N+1] = list(map(int, input().split()))
+for a in range(1, N+1):
+    maze[a][1:N+1] = list(map(int, input().split()))
 people = []
 for _ in range(M):
     people.append([tuple(map(int, input().split())), N])
@@ -15,17 +15,17 @@ dr = [-1, 0, 1, 0]
 dc = [0, 1, 0, -1]
 
 def print_maze():
-    for i in range(1, N+1):
-        for j in range(1, N+1):
+    for b in range(1, N+1):
+        for d in range(1, N+1):
             exist = False
-            if maze[i][j] != 0:
-                print(maze[i][j], end=" ")
+            if maze[b][d] != 0:
+                print(maze[b][d], end=" ")
                 continue
-            if er == i and ec == j:
+            if er == b and ec == d:
                 print("#", end = " ")
                 continue
             for person in people:
-                if (i, j) in person:
+                if (b, d) in person:
                     exist = True
                     break
             if exist:
@@ -50,34 +50,57 @@ def cal(r1, c1):
 # 벽 시계 방향 90도 회전 -> temp 만들어서 회전 후 복사본 만들고 참고
 # 벽 내구도 -1 -> maze 반영
 
-def find_square():
-    # 가장 가까운 참가자 찾기
+# 가장 가까운 참가자 찾기
+def find_person():
     people.sort(key=lambda x: (x[1], x[0]))
     r, c = people[0][0]
+    idx = 0
+    size = max(abs(r-er), abs(c-ec))
+    for i in range(len(people)):
+        tr, tc = people[i][0]
+        if (r, c) == (tr, tc):
+            continue
+        t_size = max(abs(tr-er), abs(tc-ec))
+        if t_size < size:
+            r, c = tr, tc
+            idx = i
+        elif t_size == size:
+            # TODO: 여기서 오류..
+            if tr < r:
+                r, c = tr, tc
+                idx = i
+            elif tr == r and tc < c:
+                r, c = tr, tc
+                idx = i
+    return r, c
+
+def find_square():
+    # 가장 가까운 참가자 찾기
+    r, c = find_person()
     diff_r = abs(r-er)
     diff_c = abs(c-ec)
     if diff_r > diff_c:
         l = diff_r
         ur, lr = (er, r) if er > r else (r, er)
         uc, lc = (ec, c) if ec > c else (c, ec)
-        cnt = diff_r-diff_c
-        while (cnt):
+        n = diff_r-diff_c
+        while (n):
             if 2 <= lc:
                 lc -= 1
             else:
                 uc += 1
-            cnt -= 1
+            n -= 1
     elif diff_r < diff_c:
         l = diff_c
         uc, lc = (ec, c) if ec > c else (c, ec)
         ur, lr = (er, r) if er > r else (r, er)
-        cnt = diff_c - diff_r
-        while (cnt):
+        n = diff_c - diff_r
+        while (n):
             if 2 <= lr:
                 lr -= 1
             else:
                 ur += 1
-            cnt -= 1
+            n -= 1
     else:
         l = diff_r
         ur, uc = max(r, er), max(c, ec)
@@ -88,11 +111,11 @@ def rotate():
     global er, ec
     lr, ur, lc, uc, l = find_square()
     temp = [[0 for _ in range(l+1)] for _ in range(l+1)]
-    for i in range(l+1):
-        for j in range(l+1):
-            r, c = lr + i, lc + j
+    for q in range(l+1):
+        for u in range(l+1):
+            r, c = lr + q, lc + u
             maze_val = maze[r][c]
-            tr, tc = j, l - i  # temp의 r, c
+            tr, tc = u, l - q  # temp의 r, c
             if maze_val != 0: # 벽일 때
                 maze_val -= 1
                 temp[tr][tc] = maze_val
@@ -122,15 +145,17 @@ q = []
 cnt = 0
 result = 0 # 이동 거리 합
 for i in range(K):
+    if i == 2:
+        print("now")
     print(i, "th")
     print_maze()
+    print(people)
     # 참가자별로 이동하기 = 방향 찾기+이동 가능 여부 파악
     for p in range(len(people)):
         if people[p][0] == -1:
             continue
         (r, c), cur_d = people[p]
         nr, nc = 0, 0
-        new_d = N
         # 참가자 이동: 상하좌우, maze 0으로만, 거리 줄어야, 사람 있어도 괜찮, 최대 K초(번) 반복
         for k in range(4):
             tr, tc = r+dr[k], c+dc[k]
@@ -150,9 +175,9 @@ for i in range(K):
                 cur_d = new_d
         if nr != 0 and nc != 0: # 이동했을 때만 r, c 갱신, 이동 안 했을 때는 0, 0이라 절대 안 됨
             people[p][0] = (nr, nc)
-            people[p][1] = new_d
+            people[p][1] = cur_d
             result += 1
-        if (nr == er and nc == ec) or new_d == 0: # 탈출
+        if (nr == er and nc == ec) or cur_d == 0: # 탈출
             people[p][0] = -1
             cnt += 1
             q.append(p)
@@ -174,12 +199,14 @@ for i in range(K):
     # 벽 범위 찾기
     # 벽 회전
     rotate()
+
     # people의 distance 갱신
     for m in range(len(people)):
         (pr, pc) = people[m][0]
         people[m][1] = cal(pr, pc)
+
     print_maze()
-    print("="*100)
+    print("="*50)
 
 
 print(result)
