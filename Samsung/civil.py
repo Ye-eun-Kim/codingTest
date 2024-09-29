@@ -107,30 +107,16 @@ def print_graph():
     print()
 
 for k in range(K):
-    # if k == 4:
-    #     print_graph()
-    # print(k, "th")
-    # print("Before")
-    # print_graph()
     result = 0
     center, angle, val = explore()
     if val == 0:
         break
-    # print(center, angle, val)
     for _ in range(angle):
         graph = spin(center[0], center[1], graph)
-    # print("After Spin")
-    # print_graph()
     while val:
-        # print("1", val)
         graph, val = cal(graph, 1)
-        # print("2", val)
         graph = fill(graph)
         result += val
-        # print("After fill")
-        # print_graph()
     if result == 0:
         continue
     print(result, end = ' ')
-    # print()
-    # print("="*100)
