@@ -7,8 +7,8 @@ graph = [[i for i in list(map(int, input().split()))] for _ in range(5)]
 walls = [j for j in list(map(int, input().split()))]
 
 centers = [(1,1),(1,2),(1,3), (2,1),(2,2),(2,3), (3,1),(3,2),(3,3)]
-a = [(1, -1), (0, -1), (-1, -1), (1, 0), (-1, 0), (1, 1), (0, 1), (-1, 1)]
-b = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+a = [(1, -1), (0, -1), (-1, -1), (1, 0), (-1, 0), (1, 1), (0, 1), (-1, 1)] # 돌린 뒤 순서
+b = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)] # 돌리기 전 순서
 dr = [-1, 0, 1, 0]
 dc = [0, 1, 0, -1]
 
@@ -16,12 +16,14 @@ def is_inrange(r, c):
     return 0<=r<=4 and 0<=c<=4
 
 def spin(r, c, curr_graph):
-    # TODO: 고쳐!!!
     g = copy.deepcopy(curr_graph)
-    for d in a:
-        tr, tc = r+d[0], c+d[1]
-        num = curr_graph[tr][tc]
-        g[tc][2-tr] = num
+    store = []
+    for i in range(8):
+        tr, tc = r+a[i][0], c+a[i][1]
+        store.append(curr_graph[tr][tc])
+    for j in range(8):
+        nr, nc = r+b[j][0], c+b[j][1]
+        g[nr][nc] = store.pop(0)
     return g
 
 def cal(curr_graph):
@@ -66,8 +68,7 @@ def explore():
             curr_graph = spin(r, c, curr_graph) # 90도씩 돌리기 때문
             curr_val = cal(curr_graph)
             if curr_val != 0 and curr_val > temp_val:
-                t_val = curr_val
-                t_angle = curr_angle
+                t_val, t_angle = curr_val, curr_angle
         if t_val > temp_val:
             temp_val, temp_angle, temp_center = t_val, t_angle, (r, c)
         elif t_val == temp_val and t_angle < temp_angle:
@@ -83,6 +84,8 @@ def explore():
 
 for k in range(K):
     center, angle, val = explore()
+    for _ in range(angle):
+        graph = spin(center[0], center[1], graph)
     print(center, angle, val)
 
 
