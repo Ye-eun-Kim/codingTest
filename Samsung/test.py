@@ -1,3 +1,9 @@
-people = [[(1, 3), 5], [(3, 7), 3], [(3, 5), 3]]
-people.sort(key=lambda x:(x[1], x[0]))
-print(people)
+import copy
+blocks = [1,2,3,4,5]
+block = blocks[3]
+print(block)
+block = 7
+print(block)
+b = copy.deepcopy(blocks)
+b[0] = 4
+print(b)
